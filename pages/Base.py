@@ -11,7 +11,7 @@ class Base:
         self.driver = driver
         self.driver.maximize_window()
 
-    def click(self,element_xpath):
+    def _click(self,element_xpath):
         element = WebDriverWait(self.driver,10).until(expected_conditions.presence_of_element_located((By.XPATH, element_xpath)))
         self.driver.execute_script("arguments[0].click();", element)
 

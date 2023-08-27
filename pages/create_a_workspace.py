@@ -1,6 +1,5 @@
 import time
-import os
-import subprocess
+import sys
 from pages.base import Base
 import source.config as cfg
 from selenium.webdriver.common.by import By
@@ -62,7 +61,7 @@ class CreateAWorkspace(Base):
 
     def upload_workspace_image_and_enter_details(self):
         #self.driver.find_element(By.XPATH,self.button_upload_your_image).click()
-        self.send_keys(self.input_image_url,"D:\SpeechAce\SSW-Automation\ssw-automation\source\speechace_logo.png")
+        self.send_keys(self.input_image_url,sys.path[1] +"/source/speechace_logo.png")
         workspace_name = self.set_workspace_name()
         self.send_keys(self.input_workspace_name, workspace_name)
         cfg.current_workspace_name = workspace_name

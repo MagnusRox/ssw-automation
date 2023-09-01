@@ -66,6 +66,7 @@ class CreateAnAssessment(Base):
     checkbox_show_detailed_report_checked = "//span[text()='Show score summary and detailed report to candidate']/preceding-sibling::input[@checked]"
 
     button_submit = "//button[contains(text(),'Submit')]"
+
     def __init__(self, driver):
         super().__init__(driver)
         self.wait = WebDriverWait(self.driver, 30)
@@ -90,7 +91,7 @@ class CreateAnAssessment(Base):
         assert self.driver.find_element(By.XPATH, self.text_weights_percentage) is not None
 
     def enter_question_one(self):
-        self._click(self.input_write_question.format("1"))
+        self.driver.find_element(By.XPATH,self.input_write_question.format(1)).click()
         self.wait.until(EC.visibility_of_element_located((By.XPATH, self.input_write_question_focussed)))
         self.send_keys(self.input_write_question_focussed, cfg.custom_assessment_open_ended_question)
         assert self.driver.find_element(By.XPATH, self.text_question_one_type) is not None
@@ -99,10 +100,12 @@ class CreateAnAssessment(Base):
         self.send_keys(self.input_weight_box_question.format("1"), "50")
 
     def enter_question_two(self):
-        self._click(self.input_write_question.format("2"))
+        self.driver.find_element(By.XPATH,self.input_write_question.format(2)).click()
         self.wait.until(EC.visibility_of_element_located((By.XPATH, self.input_write_question_focussed)))
         self.send_keys(self.input_write_question_focussed, cfg.custom_assessment_pronunciation_question)
 
+    def enter_weights_two(self):
+        self.send_keys(self.input_weight_box_question.format("2"), "25")
     def change_question_two_type(self):
         self._click(self.button_question_type)
         self.wait.until(EC.visibility_of_element_located((By.XPATH, self.button_read_aloud_pronunciation)))
@@ -113,10 +116,11 @@ class CreateAnAssessment(Base):
         self.send_keys(self.textarea_text_to_read_aloud, cfg.custom_assessment_pronunciation_text)
 
     def enter_question_three(self):
-        self._click(self.input_write_question.format("3"))
+        self.driver.find_element(By.XPATH,self.input_write_question.format(3)).click()
         self.wait.until(EC.visibility_of_element_located((By.XPATH, self.input_write_question_focussed)))
         self.send_keys(self.input_write_question_focussed, cfg.custom_assessment_fluency_question)
-
+    def enter_weights_three(self):
+        self.send_keys(self.input_weight_box_question.format("3"), "25")
     def change_question_three_type(self):
         self._click(self.button_question_type)
         self.wait.until(EC.visibility_of_element_located((By.XPATH, self.button_read_aloud_fluency)))
@@ -141,15 +145,15 @@ class CreateAnAssessment(Base):
         self._click(self.button_next)
 
     def add_assessment_image(self):
-        self.send_keys(self.image_assessment_image, sys.path[1] + "/source/speechace_logo.png")
+        print(sys.path[1] + "/source/speechace_logo.png")
+        self.send_keys(self.image_assessment_image, cfg.parent_dir + "/source/speechace_logo.png")
 
     def enter_assessment_name_and_description(self):
         self.send_keys(self.input_assessment_name, cfg.assessment_name)
-        self.send_keys(self.input_assessment_description,cfg.assessment_description)
+        self.send_keys(self.input_assessment_description, cfg.assessment_description)
         self.wait.until(EC.visibility_of_element_located((By.XPATH, self.display_assessment_name)))
         self.wait.until(EC.visibility_of_element_located((By.XPATH, self.display_assessment_description)))
         self._click(self.button_next)
-
 
     def assert_default_rubric(self):
         self.wait.until(EC.visibility_of_element_located((By.XPATH, self.heading_default_rubric)))
@@ -170,10 +174,5 @@ class CreateAnAssessment(Base):
         assert self.driver.find_element(By.XPATH, self.heading_display_scores_to_taker) is not None
         assert self.driver.find_element(By.XPATH, self.checkbox_show_detailed_report_checked) is not None
 
-
     def click_submit_button(self):
         self._click(self.button_submit)
-
-
-
-
